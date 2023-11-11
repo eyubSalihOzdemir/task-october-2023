@@ -1,0 +1,102 @@
+<div>
+    <span class="help is-info"  *ngIf="isLoading">Loading...</span>
+    <table class="table" *ngIf="!isLoading" style="width: 100%;">
+        <thead>
+            <tr>
+                <th class="fixed-width-column" (click)="sort('id')" [class.sorted]="currentSort.key === 'id'" style="text-align: center;">
+                    ID
+                    <span *ngIf="currentSort.key === 'id' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'id' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+                <th class="fixed-width-column" (click)="sort('name')" [class.sorted]="currentSort.key === 'name'" style="text-align: center;">
+                    Name
+                    <span *ngIf="currentSort.key === 'name' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'name' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+                <th class="fixed-width-column" (click)="sort('surname')" [class.sorted]="currentSort.key === 'surname'" style="text-align: center;">
+                    Surname
+                    <span *ngIf="currentSort.key === 'surname' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'surname' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+                <th class="fixed-width-column" (click)="sort('status')" [class.sorted]="currentSort.key === 'status'" style="text-align: center;">
+                    Status
+                    <span *ngIf="currentSort.key === 'status' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'status' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+                <th class="fixed-width-column" (click)="sort('gender')" [class.sorted]="currentSort.key === 'gender'" style="text-align: center;">
+                    Gender
+                    <span *ngIf="currentSort.key === 'gender' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'gender' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+                <th class="fixed-width-column" (click)="sort('dateOfBirth')" [class.sorted]="currentSort.key === 'dateOfBirth'" style="text-align: center;">
+                    Date of Birth
+                    <span *ngIf="currentSort.key === 'dateOfBirth' && currentSort.order === 'asc'">&#9650;</span>
+                    <span *ngIf="currentSort.key === 'dateOfBirth' && currentSort.order === 'desc'">&#9660;</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of getCurrentUsers()">
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.status }}</td>
+                <td>{{ user.gender }}</td>
+                <td>{{ user.dateOfBirth }}</td>
+                <td>
+                    <form>
+                        <button type="button" class="button is-info" (click)="openPopup(user)">Edit</button>
+                        <button type="button" class="button is-danger" [class.is-loading]="isUpdating(user.id)" (click)="deleteUser(user.id)" style="margin-left: 8px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="popup" *ngIf="isPopupOpen">
+    <div class="popup-content">
+      <!-- Your popup content goes here -->
+      <span class="help is-danger">{{ errorMessage }}</span>
+      <div *ngIf="tempEditingUser" class="field">
+        <label for="userName" class="label">Name</label>
+        <div class="control">
+          <input id="userName" class="input" [(ngModel)]="tempEditingUser.name" (keydown)="errorMessage = ''" placeholder="{{tempEditingUser.name}}">
+        </div>
+      </div> 
+      
+      <div *ngIf="tempEditingUser" class="field">
+        <label for="userSurname" class="label">Surname</label>
+        <div class="control">
+          <input id="userSurname" class="input" [(ngModel)]="tempEditingUser.surname" (keydown)="errorMessage = ''" placeholder="{{tempEditingUser.surname}}">
+        </div>
+      </div>
+
+      <div *ngIf="tempEditingUser" class="field">
+        <label for="userStatus" class="label">Status</label>
+        <div class="control">
+          <input id="userStatus" class="input" [(ngModel)]="tempEditingUser.status" (keydown)="errorMessage = ''" placeholder="{{tempEditingUser.status}}">
+        </div>
+      </div>
+
+      <div *ngIf="tempEditingUser" class="field">
+        <label for="userGender" class="label">Gender</label>
+        <div class="control">
+          <input id="userGender" class="input" [(ngModel)]="tempEditingUser.gender" (keydown)="errorMessage = ''" placeholder="{{tempEditingUser.gender}}">
+        </div>
+      </div>
+      
+      <div *ngIf="tempEditingUser" class="field">
+        <label for="userDateOfBirth" class="label">Date of Birth</label>
+        <div class="control">
+          <input id="userDateOfBirth" class="input" [(ngModel)]="tempEditingUser.dateOfBirth" (keydown)="errorMessage = ''" placeholder="{{tempEditingUser.dateOfBirth}}">
+        </div>
+      </div>
+    
+      <div class="button-container">
+        <button class="button is-primary close-button" (click)="closePopup(true)">Done</button>
+        <button class="button is-danger close-button" (click)="closePopup()" style="margin-left: 8px;">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <button class="button is-info" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+  <button class="button is-info" (click)="nextPage()" [disabled]="currentPage * itemsPerPage >= users.length">Next</button>

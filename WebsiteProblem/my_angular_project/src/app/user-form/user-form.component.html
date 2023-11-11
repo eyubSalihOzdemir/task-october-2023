@@ -1,0 +1,37 @@
+<span class="help is-danger">{{ errors }}</span>
+<div class="field">
+  <label for="userName" class="label">Name</label>
+  <div class="control">
+    <input id="userName" class="input" #userName (keydown)="errors = ''" placeholder="Enter Name">
+  </div>
+</div>
+
+<div class="field">
+  <label for="userSurname" class="label">Surname</label>
+  <div class="control">
+    <input id="userSurname" class="input" #userSurname (keydown)="errors = ''" placeholder="Enter Surname">
+  </div>
+</div>
+
+<div class="field">
+  <label for="userStatus" class="label">Status</label>
+  <div class="control">
+    <input id="userStatus" class="input" #userStatus (keydown)="errors = ''" placeholder="Enter Status">
+  </div>
+</div>
+
+<div class="field">
+  <label for="userGender" class="label">Gender</label>
+  <div class="control">
+    <input id="userGender" class="input" #userGender (keydown)="errors = ''" placeholder="Enter Gender">
+  </div>
+</div>
+
+<div class="field">
+  <label for="userDateOfBirth" class="label">Date of Birth</label>
+  <div class="control">
+    <input id="userDateOfBirth" class="input" #userDateOfBirth (keydown)="errors = ''" placeholder="Enter Date of Birth">
+  </div>
+</div>
+
+<button type="button" class="button is-primary" [class.is-loading]="isLoading" (click)="addUser(userName.value,userSurname.value,userStatus.value,userGender.value,userDateOfBirth.value)">Add User</button>
